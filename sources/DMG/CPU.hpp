@@ -81,7 +81,66 @@ public:
 	u16 imm16();
 	void cpImpl(u8);
 	void decImpl(u8&);
+	void incImpl(u8&);
 	void xorImpl(u8);
+
+private:
+	/*
+	 * a  = address
+	 * C  = condition (is flag (un)set?)
+	 * d  = immediate value
+	 * dp = dereference immediate value (pointer)
+	 * r  = register
+	 * rp = dereference register value (pointer)
+	 * s  = signed immediate value
+	 */
+
+	void ADD_r16_r16(RegisterIndex16, RegisterIndex16);
+	void ADD_r8_rp16(RegisterIndex8, RegisterIndex16);
+	void CCF();
+	void CP_d8();
+	void CP_r8(RegisterIndex8);
+	void CP_rp16(RegisterIndex16);
+	void CPL();
+	void DAA();
+	void DEC_r16(RegisterIndex16);
+	void DEC_r8(RegisterIndex8);
+	void DEC_rp16(RegisterIndex16);
+	void DI();
+	void EI();
+	void HALT();
+	void INC_r16(RegisterIndex16);
+	void INC_r8(RegisterIndex8);
+	void INC_rp16(RegisterIndex16);
+	void JP_a16();
+	void JR_C_s8(Flags);
+	void JR_NC_s8(Flags);
+	void JR_s8();
+	void LD_dp16_r16(RegisterIndex16);
+	void LD_r16_d16(RegisterIndex16);
+	void LD_r8_d8(RegisterIndex8);
+	void LD_r8_r8(RegisterIndex8, RegisterIndex8);
+	void LD_r8_rp16(RegisterIndex8, RegisterIndex16);
+	void LD_rp16_d8(RegisterIndex16);
+	void LD_rp16_r8(RegisterIndex16, RegisterIndex8);
+	void LDD_r8_rp16(RegisterIndex8, RegisterIndex16);
+	void LDD_rp16_r8(RegisterIndex16, RegisterIndex8);
+	void LDH_dp8_r8(RegisterIndex8);
+	void LDH_r8_dp8(RegisterIndex8);
+	void LDI_r8_rp16(RegisterIndex8, RegisterIndex16);
+	void LDI_rp16_r8(RegisterIndex16, RegisterIndex8);
+	void NOP() {}
+	void RL_r8(RegisterIndex8);
+	void RLC_r8(RegisterIndex8);
+	void RR_r8(RegisterIndex8);
+	void RRC_r8(RegisterIndex8);
+	void SCF();
+	void STOP();
+	void XOR_d8();
+	void XOR_r8(RegisterIndex8);
+	void XOR_rp16(RegisterIndex16);
+
+	void fillInstructionsMap();
 
 public:
 	u8 reg8(RegisterIndex8 r) const
@@ -162,42 +221,6 @@ public:
 		else
 			reg8(RegisterF) &= ~flags;
 	}
-
-private:
-	/*
-	 * a  = address
-	 * C  = condition (is flag (un)set?)
-	 * d  = immediate value
-	 * dp = dereference immediate value (pointer)
-	 * r  = register
-	 * rp = dereference register value (pointer)
-	 * s  = signed immediate value
-	 */
-
-	void CP_d8();
-	void CP_r8(RegisterIndex8);
-	void CP_rp16(RegisterIndex16);
-	void DEC_r16(RegisterIndex16);
-	void DEC_r8(RegisterIndex8);
-	void DEC_rp16(RegisterIndex16);
-	void DI();
-	void EI();
-	void JP_a16();
-	void JR_C_s8(Flags);
-	void JR_NC_s8(Flags);
-	void JR_s8();
-	void LD_r16_d16(RegisterIndex16);
-	void LD_r8_d8(RegisterIndex8);
-	void LDD_rp16_r8(RegisterIndex16, RegisterIndex8);
-	void LDH_dp8_r8(RegisterIndex8);
-	void LDH_r8_dp8(RegisterIndex8);
-	void LDI_rp16_r8(RegisterIndex16, RegisterIndex8);
-	void NOP() {}
-	void XOR_d8();
-	void XOR_r8(RegisterIndex8);
-	void XOR_rp16(RegisterIndex16);
-
-	void fillInstructionsMap();
 
 private:
 	MMU& m_mmu;
