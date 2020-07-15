@@ -19,7 +19,7 @@ namespace DMG
 class Core
 {
 public:
-	Core(MappedFile&& rom_file);
+	explicit Core(MappedFile&& rom_file);
 
 	void run();
 	void dump() const;

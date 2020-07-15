@@ -23,7 +23,8 @@ namespace DMG
 
 class CPU
 {
-	union Register {
+	union Register
+	{
 		struct {
 			u16 word;
 		};
@@ -33,7 +34,8 @@ class CPU
 		};
 	};
 
-	enum RegisterIndex8 {
+	enum RegisterIndex8
+	{
 		RegisterA = 0,
 		RegisterF,
 		RegisterB,
@@ -44,7 +46,8 @@ class CPU
 		RegisterL,
 	};
 
-	enum RegisterIndex16 {
+	enum RegisterIndex16
+	{
 		RegisterAF = 0,
 		RegisterBC,
 		RegisterDE,
@@ -60,7 +63,8 @@ class CPU
 		Carry     = 0x10,
 	};
 
-	struct Instruction {
+	struct Instruction
+	{
 		u8 op;
 		u8 length;
 		u8 cycles;
@@ -69,7 +73,7 @@ class CPU
 	};
 
 public:
-	CPU(MMU&);
+	explicit CPU(MMU&);
 	void dump() const;
 	void execNextInstruction();
 
