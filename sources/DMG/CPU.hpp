@@ -79,6 +79,8 @@ public:
 
 	u8 imm8();
 	u16 imm16();
+	void cpImpl(u8);
+	void decImpl(u8&);
 	void xorImpl(u8);
 
 public:
@@ -164,17 +166,31 @@ public:
 private:
 	/*
 	 * a  = address
+	 * C  = condition (is flag (un)set?)
 	 * d  = immediate value
-	 * dr = dereference immediate value (pointer)
+	 * dp = dereference immediate value (pointer)
 	 * r  = register
 	 * rp = dereference register value (pointer)
 	 * s  = signed immediate value
 	 */
 
+	void CP_d8();
+	void CP_r8(RegisterIndex8);
+	void CP_rp16(RegisterIndex16);
+	void DEC_r16(RegisterIndex16);
+	void DEC_r8(RegisterIndex8);
+	void DEC_rp16(RegisterIndex16);
+	void DI();
+	void EI();
 	void JP_a16();
+	void JR_C_s8(Flags);
+	void JR_NC_s8(Flags);
+	void JR_s8();
 	void LD_r16_d16(RegisterIndex16);
 	void LD_r8_d8(RegisterIndex8);
 	void LDD_rp16_r8(RegisterIndex16, RegisterIndex8);
+	void LDH_dp8_r8(RegisterIndex8);
+	void LDH_r8_dp8(RegisterIndex8);
 	void LDI_rp16_r8(RegisterIndex16, RegisterIndex8);
 	void NOP() {}
 	void XOR_d8();
