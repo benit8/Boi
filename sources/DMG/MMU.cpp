@@ -49,7 +49,8 @@ MMU::MMU(const u8* rom_data, size_t rom_size)
 u8 MMU::read8(u16 address) const
 {
 	u8 value = m_map[address];
-	printf(GREEN "READ " CYAN "[%04X]" RESET " -> " MAGENTA "%02X" RESET " (%s)\n", address, value, findRegion(address).name);
+	if (address > s_regions[0].end)
+		printf(GREEN "READ " CYAN "[%04X]" RESET " -> " MAGENTA "%02X" RESET " (%s)\n", address, value, findRegion(address).name);
 	return value;
 }
 
