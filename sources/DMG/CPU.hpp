@@ -75,7 +75,7 @@ class CPU
 public:
 	explicit CPU(MMU&);
 	void dump() const;
-	void execNextInstruction();
+	void execNextInstruction() { execNextInstructionWithMap(m_instruction_map); }
 
 	u8 imm8();
 	u16 imm16();
@@ -83,9 +83,13 @@ public:
 	void push16(u16);
 	u8 pop8();
 	u16 pop16();
+
+	void bitImpl(u8, u8);
 	void cpImpl(u8);
 	void decImpl(u8&);
 	void incImpl(u8&);
+	void resImpl(u8, u8&);
+	void setImpl(u8, u8&);
 	void xorImpl(u8);
 
 private:
@@ -109,6 +113,10 @@ private:
 	void AND_r8(RegisterIndex8) { TODO(); }
 	void AND_rp16(RegisterIndex16) { TODO(); }
 	void AND_u8() { TODO(); }
+	void BIT_r8(u8, RegisterIndex8);
+	void BIT_rp16(u8, RegisterIndex16);
+	void CALL_C_u16(Flags) { TODO(); }
+	void CALL_NC_u16(Flags) { TODO(); }
 	void CALL_u16();
 	void CCF() { TODO(); }
 	void CP_r8(RegisterIndex8);
@@ -119,16 +127,16 @@ private:
 	void DEC_r16(RegisterIndex16);
 	void DEC_r8(RegisterIndex8);
 	void DEC_rp16(RegisterIndex16);
-	void DI() { printf(BRED "TODO" RESET "\n"); }
-	void EI() { printf(BRED "TODO" RESET "\n"); }
+	void DI() { printf(BG_BRED "TODO\n" RESET); }
+	void EI() { printf(BG_BRED "TODO\n" RESET); }
 	void HALT() { TODO(); }
 	void INC_r16(RegisterIndex16);
 	void INC_r8(RegisterIndex8);
 	void INC_rp16(RegisterIndex16);
-	void JP_C_u16(Flags) { TODO(); }
-	void JP_NC_u16(Flags) { TODO(); }
-	void JP_rp16(RegisterIndex16) { TODO(); }
-	void JP_up16();
+	void JP_C_u16(Flags);
+	void JP_NC_u16(Flags);
+	void JP_r16(RegisterIndex16);
+	void JP_u16();
 	void JR_C_i8(Flags);
 	void JR_i8();
 	void JR_NC_i8(Flags);
@@ -155,23 +163,48 @@ private:
 	void OR_r8(RegisterIndex8) { TODO(); }
 	void OR_rp16(RegisterIndex16) { TODO(); }
 	void OR_u8() { TODO(); }
+	void POP_r16(RegisterIndex16) { TODO(); }
+	void PUSH_r16(RegisterIndex16) { TODO(); }
+	void RES_r8(u8, RegisterIndex8);
+	void RES_rp16(u8, RegisterIndex16);
+	void RET() { TODO(); }
+	void RET_C(Flags) { TODO(); }
+	void RET_NC(Flags) { TODO(); }
+	void RETI() { TODO(); }
 	void RL_r8(RegisterIndex8) { TODO(); }
+	void RL_rp16(RegisterIndex16) { TODO(); }
 	void RLC_r8(RegisterIndex8) { TODO(); }
+	void RLC_rp16(RegisterIndex16) { TODO(); }
 	void RR_r8(RegisterIndex8) { TODO(); }
+	void RR_rp16(RegisterIndex16) { TODO(); }
 	void RRC_r8(RegisterIndex8) { TODO(); }
+	void RRC_rp16(RegisterIndex16) { TODO(); }
+	void RST(u8) { TODO(); }
 	void SBC_r8_r8(RegisterIndex8, RegisterIndex8) { TODO(); }
 	void SBC_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
 	void SBC_r8_u8(RegisterIndex8) { TODO(); }
 	void SCF() { TODO(); }
+	void SET_r8(u8, RegisterIndex8);
+	void SET_rp16(u8, RegisterIndex16);
+	void SLA_r8(RegisterIndex8) { TODO(); }
+	void SLA_rp16(RegisterIndex16) { TODO(); }
+	void SRA_r8(RegisterIndex8) { TODO(); }
+	void SRA_rp16(RegisterIndex16) { TODO(); }
+	void SRL_r8(RegisterIndex8) { TODO(); }
+	void SRL_rp16(RegisterIndex16) { TODO(); }
 	void STOP() { TODO(); }
 	void SUB_r8(RegisterIndex8) { TODO(); }
 	void SUB_rp16(RegisterIndex16) { TODO(); }
 	void SUB_u8() { TODO(); }
+	void SWAP_r8(RegisterIndex8) { TODO(); }
+	void SWAP_rp16(RegisterIndex16) { TODO(); }
 	void XOR_r8(RegisterIndex8);
 	void XOR_rp16(RegisterIndex16);
 	void XOR_u8();
 
+	void execNextInstructionWithMap(std::map<u8, Instruction>&);
 	void fillInstructionsMap();
+	void fillCBInstructionsMap();
 
 public:
 	u8 reg8(RegisterIndex8 r) const

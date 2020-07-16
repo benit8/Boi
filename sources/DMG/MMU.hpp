@@ -30,6 +30,7 @@ public:
 	MMU(const u8* rom_data, size_t rom_size);
 
 	u8 read8(u16 address) const;
+	u8 silent_read8(u16 address) const;
 	u16 read16(u16 address) const;
 	void write8(u16 address, u8);
 	void write16(u16 address, u16);
