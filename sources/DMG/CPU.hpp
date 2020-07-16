@@ -79,6 +79,10 @@ public:
 
 	u8 imm8();
 	u16 imm16();
+	void push8(u8);
+	void push16(u16);
+	u8 pop8();
+	u16 pop16();
 	void cpImpl(u8);
 	void decImpl(u8&);
 	void incImpl(u8&);
@@ -86,59 +90,86 @@ public:
 
 private:
 	/*
-	 * a  = address
 	 * C  = condition (is flag (un)set?)
-	 * d  = immediate value
-	 * dp = dereference immediate value (pointer)
+	 * i  = signed immediate value
 	 * r  = register
 	 * rp = dereference register value (pointer)
-	 * s  = signed immediate value
+	 * u  = unsigned immediate value
+	 * up = dereference immediate value (pointer)
 	 */
 
-	void ADD_r16_r16(RegisterIndex16, RegisterIndex16);
-	void ADD_r8_rp16(RegisterIndex8, RegisterIndex16);
-	void CCF();
-	void CP_d8();
+	void ADC_r8_r8(RegisterIndex8, RegisterIndex8) { TODO(); }
+	void ADC_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
+	void ADC_r8_u8(RegisterIndex8) { TODO(); }
+	void ADD_r16_i8(RegisterIndex16) { TODO(); }
+	void ADD_r16_r16(RegisterIndex16, RegisterIndex16) { TODO(); }
+	void ADD_r8_r8(RegisterIndex8, RegisterIndex8) { TODO(); }
+	void ADD_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
+	void ADD_r8_u8(RegisterIndex8) { TODO(); }
+	void AND_r8(RegisterIndex8) { TODO(); }
+	void AND_rp16(RegisterIndex16) { TODO(); }
+	void AND_u8() { TODO(); }
+	void CALL_u16();
+	void CCF() { TODO(); }
 	void CP_r8(RegisterIndex8);
 	void CP_rp16(RegisterIndex16);
-	void CPL();
-	void DAA();
+	void CP_u8();
+	void CPL() { TODO(); }
+	void DAA() { TODO(); }
 	void DEC_r16(RegisterIndex16);
 	void DEC_r8(RegisterIndex8);
 	void DEC_rp16(RegisterIndex16);
-	void DI();
-	void EI();
-	void HALT();
+	void DI() { printf(BRED "TODO" RESET "\n"); }
+	void EI() { printf(BRED "TODO" RESET "\n"); }
+	void HALT() { TODO(); }
 	void INC_r16(RegisterIndex16);
 	void INC_r8(RegisterIndex8);
 	void INC_rp16(RegisterIndex16);
-	void JP_a16();
-	void JR_C_s8(Flags);
-	void JR_NC_s8(Flags);
-	void JR_s8();
-	void LD_dp16_r16(RegisterIndex16);
-	void LD_r16_d16(RegisterIndex16);
-	void LD_r8_d8(RegisterIndex8);
+	void JP_C_u16(Flags) { TODO(); }
+	void JP_NC_u16(Flags) { TODO(); }
+	void JP_rp16(RegisterIndex16) { TODO(); }
+	void JP_up16();
+	void JR_C_i8(Flags);
+	void JR_i8();
+	void JR_NC_i8(Flags);
+	void LD_r16_r16(RegisterIndex16, RegisterIndex16);
+	void LD_r16_r16i8(RegisterIndex16, RegisterIndex16);
+	void LD_r16_u16(RegisterIndex16);
 	void LD_r8_r8(RegisterIndex8, RegisterIndex8);
 	void LD_r8_rp16(RegisterIndex8, RegisterIndex16);
-	void LD_rp16_d8(RegisterIndex16);
+	void LD_r8_u8(RegisterIndex8);
+	void LD_r8_up16(RegisterIndex8);
 	void LD_rp16_r8(RegisterIndex16, RegisterIndex8);
-	void LDD_r8_rp16(RegisterIndex8, RegisterIndex16);
+	void LD_rp16_u8(RegisterIndex16);
+	void LD_up16_r16(RegisterIndex16);
+	void LD_up16_r8(RegisterIndex8);
+	void LDD_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
 	void LDD_rp16_r8(RegisterIndex16, RegisterIndex8);
-	void LDH_dp8_r8(RegisterIndex8);
-	void LDH_r8_dp8(RegisterIndex8);
-	void LDI_r8_rp16(RegisterIndex8, RegisterIndex16);
+	void LDH_r8_rp8(RegisterIndex8, RegisterIndex8) { TODO(); }
+	void LDH_r8_up8(RegisterIndex8);
+	void LDH_rp8_r8(RegisterIndex8, RegisterIndex8) { TODO(); }
+	void LDH_up8_r8(RegisterIndex8);
+	void LDI_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
 	void LDI_rp16_r8(RegisterIndex16, RegisterIndex8);
 	void NOP() {}
-	void RL_r8(RegisterIndex8);
-	void RLC_r8(RegisterIndex8);
-	void RR_r8(RegisterIndex8);
-	void RRC_r8(RegisterIndex8);
-	void SCF();
-	void STOP();
-	void XOR_d8();
+	void OR_r8(RegisterIndex8) { TODO(); }
+	void OR_rp16(RegisterIndex16) { TODO(); }
+	void OR_u8() { TODO(); }
+	void RL_r8(RegisterIndex8) { TODO(); }
+	void RLC_r8(RegisterIndex8) { TODO(); }
+	void RR_r8(RegisterIndex8) { TODO(); }
+	void RRC_r8(RegisterIndex8) { TODO(); }
+	void SBC_r8_r8(RegisterIndex8, RegisterIndex8) { TODO(); }
+	void SBC_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
+	void SBC_r8_u8(RegisterIndex8) { TODO(); }
+	void SCF() { TODO(); }
+	void STOP() { TODO(); }
+	void SUB_r8(RegisterIndex8) { TODO(); }
+	void SUB_rp16(RegisterIndex16) { TODO(); }
+	void SUB_u8() { TODO(); }
 	void XOR_r8(RegisterIndex8);
 	void XOR_rp16(RegisterIndex16);
+	void XOR_u8();
 
 	void fillInstructionsMap();
 
