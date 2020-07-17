@@ -99,6 +99,15 @@ void CPU::bitImpl(u8 bit, u8 value)
 	setFlags(HalfCarry, true);
 }
 
+void CPU::callImpl(u16 location, bool cond, u8 cycles_on_success)
+{
+	if (cond) {
+		push16(pc());
+		m_pc = location;
+		m_cycles += cycles_on_success;
+	}
+}
+
 void CPU::cpImpl(u8 value)
 {
 	setFlags(Zero, a() == value);
@@ -127,6 +136,14 @@ void CPU::incImpl(u8& value)
 	setFlags(HalfCarry, (value & 0xF) == 0xF);
 }
 
+void CPU::jpImpl(u16 location, bool cond, u8 cycles_on_success)
+{
+	if (cond) {
+		m_pc = location;
+		m_cycles += cycles_on_success;
+	}
+}
+
 void CPU::resImpl(u8 bit, u8& value)
 {
 	ASSERT(bit < 8);
@@ -142,9 +159,7 @@ void CPU::setImpl(u8 bit, u8& value)
 void CPU::xorImpl(u8 value)
 {
 	resetFlags();
-
 	setA(a() ^ value);
-
 	setFlags(Zero, a() == 0);
 }
 
@@ -157,12 +172,9 @@ void CPU::CP_u8() { cpImpl(imm8()); }
 void CPU::CP_r8(RegisterIndex8 reg) { cpImpl(reg8(reg)); }
 void CPU::CP_rp16(RegisterIndex16 reg) { cpImpl(m_mmu.read8(reg16(reg))); }
 
-void CPU::CALL_u16()
-{
-	u16 location = imm16();
-	push16(pc());
-	m_pc = location;
-}
+void CPU::CALL_u16() { callImpl(imm16()); }
+void CPU::CALL_C_u16(Flags flag) { callImpl(imm16(), f() & flag, 12); }
+void CPU::CALL_NC_u16(Flags flag) { callImpl(imm16(), !(f() & flag), 12); }
 
 void CPU::DEC_r8(RegisterIndex8 reg) { decImpl(reg8(reg)); }
 void CPU::DEC_r16(RegisterIndex16 reg) { reg16(reg)--; }
@@ -182,42 +194,14 @@ void CPU::INC_rp16(RegisterIndex16 reg)
 	m_mmu.write8(reg16(reg), value);
 }
 
-void CPU::JP_u16() { m_pc = imm16(); }
-void CPU::JP_r16(RegisterIndex16 reg) { m_pc = reg16(reg); }
-void CPU::JP_C_u16(Flags flag)
-{
-	u16 location = imm16();
-	if (f() & flag) {
-		m_pc = location;
-		m_cycles += 4;
-	}
-}
-void CPU::JP_NC_u16(Flags flag)
-{
-	u16 location = imm16();
-	if (!(f() & flag)) {
-		m_pc = location;
-		m_cycles += 4;
-	}
-}
+void CPU::JP_u16() { jpImpl(imm16()); }
+void CPU::JP_r16(RegisterIndex16 reg) { jpImpl(reg16(reg)); }
+void CPU::JP_C_u16(Flags flag) { jpImpl(imm16(), f() & flag, 4); }
+void CPU::JP_NC_u16(Flags flag) { jpImpl(imm16(), !(f() & flag), 4); }
 
-void CPU::JR_i8() { m_pc = m_pc + (i8)imm8(); }
-void CPU::JR_C_i8(Flags flag)
-{
-	i8 relative_location = (i8)imm8();
-	if (f() & flag) {
-		m_pc += relative_location;
-		m_cycles += 4;
-	}
-}
-void CPU::JR_NC_i8(Flags flag)
-{
-	i8 relative_location = (i8)imm8();
-	if (!(f() & flag)) {
-		m_pc += relative_location;
-		m_cycles += 4;
-	}
-}
+void CPU::JR_i8() { jpImpl(pc() + (i8)imm8()); }
+void CPU::JR_C_i8(Flags flag) { jpImpl(pc() + (i8)imm8(), f() & flag, 4); }
+void CPU::JR_NC_i8(Flags flag) { jpImpl(pc() + (i8)imm8(), !(f() & flag), 4); }
 
 void CPU::LD_r8_u8(RegisterIndex8 reg) { reg8(reg) = imm8(); }
 void CPU::LD_r8_r8(RegisterIndex8 r1, RegisterIndex8 r2) { reg8(r1) = reg8(r2); }
@@ -237,6 +221,9 @@ void CPU::LDH_up8_r8(RegisterIndex8 reg) { m_mmu.write8(0xFF00 + imm8(), reg8(re
 void CPU::LDH_r8_up8(RegisterIndex8 reg) { reg8(reg) = m_mmu.read8(0xFF00 + imm8()); }
 
 void CPU::LDI_rp16_r8(RegisterIndex16 ptr, RegisterIndex8 reg) { m_mmu.write8(reg16(ptr)++, reg8(reg)); }
+
+void CPU::POP_r16(RegisterIndex16 reg) { reg16(reg) = pop16(); }
+void CPU::PUSH_r16(RegisterIndex16 reg) { push16(reg16(reg)); }
 
 void CPU::RES_r8(u8 bit, RegisterIndex8 reg) { resImpl(bit, reg8(reg)); }
 void CPU::RES_rp16(u8 bit, RegisterIndex16 ptr)

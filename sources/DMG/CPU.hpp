@@ -84,13 +84,15 @@ public:
 	u8 pop8();
 	u16 pop16();
 
-	void bitImpl(u8, u8);
-	void cpImpl(u8);
-	void decImpl(u8&);
-	void incImpl(u8&);
-	void resImpl(u8, u8&);
-	void setImpl(u8, u8&);
-	void xorImpl(u8);
+	void bitImpl(u8 bit, u8 value);
+	void callImpl(u16 location, bool condition = true, u8 cycles_on_success = 0);
+	void cpImpl(u8 value);
+	void decImpl(u8& value);
+	void incImpl(u8& value);
+	void jpImpl(u16 location, bool condition = true, u8 cycles_on_success = 0);
+	void resImpl(u8 bit, u8& value);
+	void setImpl(u8 bit, u8& value);
+	void xorImpl(u8 value);
 
 private:
 	/*
@@ -115,8 +117,8 @@ private:
 	void AND_u8() { TODO(); }
 	void BIT_r8(u8, RegisterIndex8);
 	void BIT_rp16(u8, RegisterIndex16);
-	void CALL_C_u16(Flags) { TODO(); }
-	void CALL_NC_u16(Flags) { TODO(); }
+	void CALL_C_u16(Flags);
+	void CALL_NC_u16(Flags);
 	void CALL_u16();
 	void CCF() { TODO(); }
 	void CP_r8(RegisterIndex8);
@@ -163,8 +165,8 @@ private:
 	void OR_r8(RegisterIndex8) { TODO(); }
 	void OR_rp16(RegisterIndex16) { TODO(); }
 	void OR_u8() { TODO(); }
-	void POP_r16(RegisterIndex16) { TODO(); }
-	void PUSH_r16(RegisterIndex16) { TODO(); }
+	void POP_r16(RegisterIndex16);
+	void PUSH_r16(RegisterIndex16);
 	void RES_r8(u8, RegisterIndex8);
 	void RES_rp16(u8, RegisterIndex16);
 	void RET() { TODO(); }
