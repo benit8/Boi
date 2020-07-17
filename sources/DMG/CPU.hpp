@@ -91,7 +91,9 @@ public:
 	void incImpl(u8& value);
 	void jpImpl(u16 location, bool condition = true, u8 cycles_on_success = 0);
 	void resImpl(u8 bit, u8& value);
+	void retImpl(bool condition = true, u8 cycles_on_success = 0);
 	void setImpl(u8 bit, u8& value);
+	void swapImpl(u8& value);
 	void xorImpl(u8 value);
 
 private:
@@ -169,9 +171,9 @@ private:
 	void PUSH_r16(RegisterIndex16);
 	void RES_r8(u8, RegisterIndex8);
 	void RES_rp16(u8, RegisterIndex16);
-	void RET() { TODO(); }
-	void RET_C(Flags) { TODO(); }
-	void RET_NC(Flags) { TODO(); }
+	void RET();
+	void RET_C(Flags);
+	void RET_NC(Flags);
 	void RETI() { TODO(); }
 	void RL_r8(RegisterIndex8) { TODO(); }
 	void RL_rp16(RegisterIndex16) { TODO(); }
@@ -181,7 +183,7 @@ private:
 	void RR_rp16(RegisterIndex16) { TODO(); }
 	void RRC_r8(RegisterIndex8) { TODO(); }
 	void RRC_rp16(RegisterIndex16) { TODO(); }
-	void RST(u8) { TODO(); }
+	void RST(u8);
 	void SBC_r8_r8(RegisterIndex8, RegisterIndex8) { TODO(); }
 	void SBC_r8_rp16(RegisterIndex8, RegisterIndex16) { TODO(); }
 	void SBC_r8_u8(RegisterIndex8) { TODO(); }
@@ -198,8 +200,8 @@ private:
 	void SUB_r8(RegisterIndex8) { TODO(); }
 	void SUB_rp16(RegisterIndex16) { TODO(); }
 	void SUB_u8() { TODO(); }
-	void SWAP_r8(RegisterIndex8) { TODO(); }
-	void SWAP_rp16(RegisterIndex16) { TODO(); }
+	void SWAP_r8(RegisterIndex8);
+	void SWAP_rp16(RegisterIndex16);
 	void XOR_r8(RegisterIndex8);
 	void XOR_rp16(RegisterIndex16);
 	void XOR_u8();

@@ -150,10 +150,25 @@ void CPU::resImpl(u8 bit, u8& value)
 	value &= ~(1 << bit);
 }
 
+void CPU::retImpl(bool cond, u8 cycles_on_success)
+{
+	if (cond) {
+		m_pc = pop16();
+		m_cycles += cycles_on_success;
+	}
+}
+
 void CPU::setImpl(u8 bit, u8& value)
 {
 	ASSERT(bit < 8);
 	value |= (1 << bit);
+}
+
+void CPU::swapImpl(u8& value)
+{
+	resetFlags();
+	value = ((value & 0xF) << 4) | (value >> 4);
+	setFlags(Zero, value == 0);
 }
 
 void CPU::xorImpl(u8 value)
@@ -218,8 +233,17 @@ void CPU::PUSH_r16(RegisterIndex16 reg) { push16(reg16(reg)); }
 void CPU::RES_r8(u8 bit, RegisterIndex8 reg) { resImpl(bit, reg8(reg)); }
 void CPU::RES_rp16(u8 bit, RegisterIndex16 ptr) { resImpl(bit, m_mmu.at(reg16(ptr))); }
 
+void CPU::RET() { retImpl(); }
+void CPU::RET_C(Flags flag) { retImpl(f() & flag, 12); }
+void CPU::RET_NC(Flags flag) { retImpl(!(f() & flag), 12); }
+
+void CPU::RST(u8 location) { push16(pc()); m_pc = location; }
+
 void CPU::SET_r8(u8 bit, RegisterIndex8 reg) { setImpl(bit, reg8(reg)); }
 void CPU::SET_rp16(u8 bit, RegisterIndex16 ptr) { setImpl(bit, m_mmu.at(reg16(ptr))); }
+
+void CPU::SWAP_r8(RegisterIndex8 reg) { swapImpl(reg8(reg)); }
+void CPU::SWAP_rp16(RegisterIndex16 ptr) { swapImpl(m_mmu.at(reg16(ptr))); }
 
 void CPU::XOR_u8() { xorImpl(imm8()); }
 void CPU::XOR_r8(RegisterIndex8 reg) { xorImpl(reg8(reg)); }
