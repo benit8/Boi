@@ -78,16 +78,6 @@ void MMU::write16(u16 address, u16 value)
 	m_map[address + 1] = value >> 8;
 }
 
-const u8* MMU::slot(u16 address) const
-{
-	return &m_map[address];
-}
-
-u8* MMU::slot(u16 address)
-{
-	return &m_map[address];
-}
-
 bool MMU::testLogoHeader() const
 {
 	return memcmp(s_logo_header, slot(0x104), sizeof(s_logo_header)) == 0;

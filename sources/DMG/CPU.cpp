@@ -178,21 +178,11 @@ void CPU::CALL_NC_u16(Flags flag) { callImpl(imm16(), !(f() & flag), 12); }
 
 void CPU::DEC_r8(RegisterIndex8 reg) { decImpl(reg8(reg)); }
 void CPU::DEC_r16(RegisterIndex16 reg) { reg16(reg)--; }
-void CPU::DEC_rp16(RegisterIndex16 reg)
-{
-	u8 value = m_mmu.read8(reg16(reg));
-	decImpl(value);
-	m_mmu.write8(reg16(reg), value);
-}
+void CPU::DEC_rp16(RegisterIndex16 ptr) { decImpl(m_mmu.at(reg16(ptr))); }
 
 void CPU::INC_r8(RegisterIndex8 reg) { incImpl(reg8(reg)); }
 void CPU::INC_r16(RegisterIndex16 reg) { reg16(reg)++; }
-void CPU::INC_rp16(RegisterIndex16 reg)
-{
-	u8 value = m_mmu.read8(reg16(reg));
-	incImpl(value);
-	m_mmu.write8(reg16(reg), value);
-}
+void CPU::INC_rp16(RegisterIndex16 ptr) { incImpl(m_mmu.at(reg16(ptr))); }
 
 void CPU::JP_u16() { jpImpl(imm16()); }
 void CPU::JP_r16(RegisterIndex16 reg) { jpImpl(reg16(reg)); }
@@ -226,20 +216,10 @@ void CPU::POP_r16(RegisterIndex16 reg) { reg16(reg) = pop16(); }
 void CPU::PUSH_r16(RegisterIndex16 reg) { push16(reg16(reg)); }
 
 void CPU::RES_r8(u8 bit, RegisterIndex8 reg) { resImpl(bit, reg8(reg)); }
-void CPU::RES_rp16(u8 bit, RegisterIndex16 ptr)
-{
-	auto value = m_mmu.read8(reg16(ptr));
-	resImpl(bit, value);
-	m_mmu.write8(reg16(ptr), value);
-}
+void CPU::RES_rp16(u8 bit, RegisterIndex16 ptr) { resImpl(bit, m_mmu.at(reg16(ptr))); }
 
 void CPU::SET_r8(u8 bit, RegisterIndex8 reg) { setImpl(bit, reg8(reg)); }
-void CPU::SET_rp16(u8 bit, RegisterIndex16 ptr)
-{
-	auto value = m_mmu.read8(reg16(ptr));
-	setImpl(bit, value);
-	m_mmu.write8(reg16(ptr), value);
-}
+void CPU::SET_rp16(u8 bit, RegisterIndex16 ptr) { setImpl(bit, m_mmu.at(reg16(ptr))); }
 
 void CPU::XOR_u8() { xorImpl(imm8()); }
 void CPU::XOR_r8(RegisterIndex8 reg) { xorImpl(reg8(reg)); }

@@ -35,8 +35,9 @@ public:
 	void write8(u16 address, u8);
 	void write16(u16 address, u16);
 
-	const u8* slot(u16 address) const;
-	u8* slot(u16 address);
+	u8& at(u16 address) { return m_map[address]; }
+	const u8* slot(u16 address) const { return &m_map[address]; }
+	u8* slot(u16 address) { return &m_map[address]; }
 
 	bool testLogoHeader() const;
 
